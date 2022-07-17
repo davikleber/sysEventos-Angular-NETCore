@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using Eventos.API.Models;
+using Eventos.API.Data;
 
 namespace Eventos.API.Controllers
 {
@@ -13,50 +14,28 @@ namespace Eventos.API.Controllers
     [Route("api/[controller]")]
     public class EventosController : ControllerBase
     {
-        public IEnumerable<Evento> _evento = new Evento[] {
-                new Evento(){
+        private readonly DataContext _context;
 
-                EventoId = 1,
-                Tema = "Angular .NET 5 EF",
-                Local = "Fortaleza",
-                Lote = "Lote 1°",
-                QntPessoa = 5663,
-                DataEvento = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy"),
-                ImagemURL = "Foto1.png"
-            },
-
-             new Evento(){
-
-                EventoId = 2,
-                Tema = "EntityframeWork Core",
-                Local = "Recife",
-                Lote = "Lote 2°",
-                QntPessoa = 78963,
-                DataEvento = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"),
-                ImagemURL = "Foto2.png"
-            }            
-
-           };
-         
-        public EventosController()
+        public EventosController(DataContext context)
         {
-           
+            _context = context;
+
         }
 
         [HttpGet]
         public IEnumerable<Evento> Get()
         {
-           return _evento;
-           
+            return _context.Eventos;
+
         }
 
         [HttpGet("{id}")]
         public IEnumerable<Evento> GetByid(int id)
         {
-           return _evento.Where(evento=>evento.EventoId == id);;
-           
+            return _context.Eventos.Where(evento => evento.EventoId == id); ;
+
         }
 
-        
+
     }
 }
